@@ -4,201 +4,181 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Turndown DSP</title>
-<meta name="description" content="Turndown DSP. Coming soon.">
+<meta name="description" content="POSTER BOY is a channel strip for quickly shaping a group of tracks without the problems of summing. Also Tempo Bridge, for live Ableton rigs.">
+<link rel="canonical" href="https://turndowndsp.com/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Turndown DSP">
+<meta property="og:description" content="POSTER BOY is a channel strip for quickly shaping a group of tracks without the problems of summing. Also Tempo Bridge, for live Ableton rigs.">
+<meta property="og:url" content="https://turndowndsp.com/">
+<meta property="og:image" content="https://turndowndsp.com/assets/img/poster-boy-hero-loop-poster-2026-11.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#FFFFFF">
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png">
 <link rel="icon" type="image/png" sizes="512x512" href="favicon-512.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;800&display=swap">
-<style>
-  :root {
-    color-scheme: dark;
-    --ground: #0a0b0c;
-    --ground-deep: #050506;
-    --trace: #f4f6f8;
-    --trace-faint: #7a7f85;
-  }
-  html, body { height: 100%; }
-  body {
-    margin: 0;
-    background: radial-gradient(ellipse at 50% 45%, var(--ground) 0%, var(--ground-deep) 75%);
-    background-color: var(--ground-deep);
-    color: var(--trace);
-    font-family: "Archivo", "Helvetica Neue", Arial, sans-serif;
-    overflow: hidden;
-  }
-  main {
-    box-sizing: border-box;
-    height: 100%;
-    padding-inline: max(16px, 4vw);
-    padding-block: 24px;
-    /* Word dead centre; "Coming soon" centred in the space below it. */
-    display: grid;
-    grid-template-rows: 1fr auto 1fr;
-    justify-items: center;
-  }
-  h1 {
-    grid-row: 2;
-    margin: 0;
-    font-weight: 800;
-    font-size: 17vw; /* replaced by the fit script once the font has loaded */
-    line-height: 1;
-    letter-spacing: -0.02em;
-    white-space: nowrap;
-    user-select: none;
-  }
-  h1 a {
-    color: inherit;
-    text-decoration: none;
-  }
-  h1 a:focus-visible {
-    outline: 2px solid var(--trace-faint);
-    outline-offset: 0.08em;
-  }
-  h1 span {
-    display: inline-block;
-    will-change: transform, opacity;
-  }
-  .soon {
-    grid-row: 3;
-    align-self: center;
-    margin: 0;
-    font-weight: 400;
-    font-size: clamp(11px, 1.1vw, 15px);
-    letter-spacing: 0.6em;
-    margin-right: -0.6em; /* cancels the trailing letter-space so it centres */
-    text-transform: uppercase;
-    color: var(--trace-faint);
-  }
-
-  /* Start states only apply once the script has run, so the page still
-     reads with scripts off. */
-  .armed h1 span {
-    opacity: 0;
-    transform: translateY(var(--dy));
-  }
-  .armed .soon { opacity: 0; transform: translateY(8px); }
-
-  /* The polarity slash through the O, drawn bottom-left to top-right. */
-  h1 .o { position: relative; }
-  h1 .o::after {
-    content: "";
-    position: absolute;
-    left: 50%;
-    top: var(--cy, 50%); /* set by the script to the O's own middle */
-    width: 0.86em;
-    height: 0.085em;
-    margin-left: -0.43em;
-    margin-top: -0.0425em;
-    background: currentColor;
-    transform: rotate(-58deg);
-  }
-  .armed h1 .o::after { clip-path: inset(0 100% 0 0); }
-  .play h1 .o::after {
-    clip-path: inset(0 0 0 0);
-    transition: clip-path .5s cubic-bezier(.65, 0, .35, 1) 3.2s;
-  }
-
-  .play h1 span {
-    opacity: 1;
-    transform: none;
-    transition:
-      transform 3s cubic-bezier(.22, 1, .36, 1) var(--delay),
-      opacity 2.2s ease-out var(--delay);
-  }
-  .play .soon {
-    opacity: 1;
-    transform: none;
-    transition: opacity 1.6s ease-out 2.2s, transform 1.6s cubic-bezier(.22, 1, .36, 1) 2.2s;
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .armed h1 span { transform: none; }
-    .armed .soon { transform: none; }
-    .play h1 span { transition: opacity .8s ease-out; }
-    .play .soon { transition: opacity .8s ease-out .6s; }
-    .armed h1 .o::after { clip-path: none; opacity: 0; }
-    .play h1 .o::after { opacity: 1; transition: opacity .8s ease-out 1.2s; }
-  }
-</style>
+<link rel="preload" href="assets/fonts/HostGrotesk-300.ttf" as="font" type="font/ttf" crossorigin>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<main id="stage">
-  <h1 aria-label="Turndown"><a href="https://www.instagram.com/turndowndsp/" target="_blank" rel="noopener" aria-label="Turndown DSP on Instagram"><span aria-hidden="true">T</span><span aria-hidden="true">U</span><span aria-hidden="true">R</span><span aria-hidden="true">N</span><span aria-hidden="true">D</span><span class="o" aria-hidden="true">O</span><span aria-hidden="true">W</span><span aria-hidden="true">N</span></a></h1>
-  <p class="soon">Coming soon</p>
+<header class="rail">
+  <div class="rail-top">
+    <div class="rail-head">
+      <a class="logo" href="./" data-cursor="link" aria-label="Turndown"><img src="assets/img/turndown-logo-ink.svg" width="156" height="20" alt="Turndown"></a>
+      <div class="rail-reading">
+        <div class="readout-inline" aria-hidden="true"><span class="fig"><span data-freq>1.00</span><span class="unit" data-freq-unit>kHz</span></span><span class="fig"><span data-gain>−3.0</span><span class="unit" data-gain-unit>dB</span></span></div>
+      </div>
+    </div>
+    <nav class="rail-index" aria-label="Sections">
+      <p><a class="quiet-link" href="#poster-boy" data-cursor="link">POSTER BOY</a></p>
+      <p><a class="quiet-link" href="#line-up" data-cursor="link">Tempo Bridge</a></p>
+      <p><a class="quiet-link" href="#beta" data-cursor="link">Beta</a></p>
+    </nav>
+  </div>
+  <div class="rail-bottom">
+    <div class="instruments">
+      <div class="scope">
+        <svg id="scope" viewBox="0 0 100 100" role="img" aria-label="Two notes at 3:2, drawn against each other" preserveAspectRatio="xMidYMid meet">
+          <circle cx="50" cy="50" r="46" fill="none" stroke="#CFC8BA" stroke-width="1" vector-effect="non-scaling-stroke"/>
+          <line x1="4" y1="50" x2="96" y2="50" stroke="#CFC8BA" stroke-width="1" vector-effect="non-scaling-stroke"/>
+          <line x1="50" y1="4" x2="50" y2="96" stroke="#CFC8BA" stroke-width="1" vector-effect="non-scaling-stroke"/>
+          <path id="scope-trace" d="" fill="none" stroke="#151514" stroke-width="1" stroke-linejoin="miter" vector-effect="non-scaling-stroke"/>
+        </svg>
+        <p class="scope-label">L / R</p>
+      </div>
+      <div class="readout" id="readout" role="status" aria-live="off" aria-label="Cursor reading: 1.00 kHz, −3.0 dB">
+        <div class="readout-group">
+          <p class="label">freq</p>
+          <p class="fig"><span data-freq>1.00</span><span class="unit" data-freq-unit>kHz</span></p>
+          <svg class="readout-axis" width="100%" height="9" aria-hidden="true">
+            <line x1="0" y1="8.5" x2="100%" y2="8.5" stroke="#CFC8BA" stroke-width="1"/>
+            <line id="readout-tick" x1="56.63%" y1="2" x2="56.63%" y2="9" stroke="#8C4700" stroke-width="1"/>
+          </svg>
+        </div>
+        <div class="readout-group">
+          <p class="label">gain</p>
+          <p class="fig"><span data-gain>−3.0</span><span class="unit" data-gain-unit>dB</span></p>
+        </div>
+      </div>
+    </div>
+    <div class="rail-foot">
+      <p class="small"><a class="link" href="mailto:jake@turndowndsp.com" data-cursor="link">jake@turndowndsp.com</a></p>
+      <p class="small">Turndown DSP · Jake Gillespie</p>
+    </div>
+  </div>
+</header>
+
+<main class="page">
+
+  <section class="room">
+    <div class="hero">
+      <video autoplay loop muted playsinline preload="auto" poster="assets/img/poster-boy-hero-loop-poster-2026-11.jpg" aria-label="POSTER BOY, slowly panning in a white room">
+        <source media="(max-width: 809.98px)" src="assets/video/poster-boy-hero-loop-2026-11-720.mp4" type="video/mp4">
+        <source src="assets/video/poster-boy-hero-loop-2026-11.webm" type="video/webm">
+        <source src="assets/video/poster-boy-hero-loop-2026-11.mp4" type="video/mp4">
+      </video>
+    </div>
+  </section>
+
+  <section class="intro" id="poster-boy">
+    <div class="content">
+      <h1 class="display">POSTER BOY<br><span class="display-second">Regain control and time</span></h1>
+      <div class="intro-side">
+        <p class="reading second">A channel strip for quickly shaping a group of tracks without the problems of summing. Quicker results with more control.</p>
+        <p class="reading"><a class="link" href="mailto:jake@turndowndsp.com?subject=POSTER%20BOY%20beta" data-cursor="link">Email me to try it</a></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="floor">
+    <div class="floor-lines" id="floor"></div>
+    <div class="floor-caption">
+      <p class="small"><span class="when-wide">Move the cursor. That’s the bus EQ, and channels 1 to 3 are getting it.</span><span class="when-narrow">Drag. That’s the bus EQ, and channels 1 to 3 are getting it.</span></p>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="content">
+      <div class="head">
+        <h2 class="section-title">POSTER BOY</h2>
+        <p class="label">Channel strip</p>
+      </div>
+      <div class="body">
+        <div class="body-text">
+          <p class="reading">As a producer and session musician, I work with a lot of tracks that these days get grouped and shaped on a bus. But you can’t send bus EQ to a mix engineer when you print multitracks. POSTER BOY lets me EQ from the bus and make everything fit the song as if it were one instrument, knowing that when I print my tracks they’ll have the shape I heard in my session.</p>
+          <p class="reading">Put it on every track in the group and once on the bus, and set the bus one to Master. Use the EQ to shape the bus so it fits the song. Your EQ, AIR and SAT moves are applied to the POSTER BOY on each track.</p>
+          <p class="reading">The compressor, expander, limiter and reverb stay local to each track. Classic tone-shaping tools, so you can mix single tracks the way you would with any other channel strip.</p>
+          <p class="reading">Sometimes, once your tracks are in a song, all they need is a little air or a little density to sit in the mix. AIR pushes the high highs forward as much as you need, without getting harsh or stepping on toes. SAT adds some tape density to fill space in your low mids and give your mix a solid foundation to sit on.</p>
+          <p class="reading">The console lets you change the balance and cohesion of your tracks from one window, so you aren’t opening and closing plugin windows while you’re trying to think about the big picture.</p>
+          <p class="reading">Built with tracking in mind. At default settings it adds 0 ms of latency, so you can record your instrument the way you want to hear it, and it nulls completely against the original track. Your sound to shape, not ours.</p>
+        </div>
+        <div class="specs">
+          <div class="spec-row"><p class="label">Formats</p><p class="figures">AU · VST3</p></div>
+          <div class="spec-row"><p class="label">Mac</p><p class="figures">Apple Silicon and Intel</p></div>
+          <div class="spec-row"><p class="label">Pro Tools</p><p class="figures">AAX in progress</p></div>
+          <div class="spec-row"><p class="label">Channels per group</p><p class="figures">24</p></div>
+          <div class="spec-row"><p class="label">Installer</p><p class="figures">Signed and notarised</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="line-up">
+    <div class="content">
+      <article class="product">
+        <div class="head">
+          <h2 class="section-title">Tempo Bridge</h2>
+          <p class="label">Mac app</p>
+        </div>
+        <div class="product-body">
+          <div class="well">
+            <img src="assets/img/tempo-bridge-in-time.png" width="860" height="706" loading="lazy" alt="Tempo Bridge Receiver window showing IN TIME, 128.0 BPM, 4/4, playing">
+          </div>
+          <div class="product-text">
+            <p class="reading">Your instrument joins the band.</p>
+            <p class="reading second">Ableton Link is already great, but it has no hierarchy, which makes it hard to rely on for live performance. Tempo Bridge lets you send and receive the Link information you need without making decisions for you. MIDI tempo is great, but it doesn't give you a grid or a downbeat you can trust. The music is out there. Tempo Bridge brings it to you.</p>
+            <div class="specs">
+              <div class="spec-row"><p class="label">Platform</p><p class="figures">macOS</p></div>
+              <div class="spec-row"><p class="label">Works with</p><p class="figures">Ableton Live</p></div>
+              <div class="spec-row"><p class="label">Status</p><p class="figures">In development</p></div>
+            </div>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section class="block beta" id="beta">
+    <div class="content">
+      <div class="head">
+        <h2 class="section-title">Beta</h2>
+        <p class="label">By email</p>
+      </div>
+      <div class="beta-body">
+        <p class="reading second">We’re still building and testing. If you want to help test, email me at jake@turndowndsp.com and ask for a beta.</p>
+        <div class="beta-email">
+          <h2 class="section-title"><a class="link" href="mailto:jake@turndowndsp.com" data-cursor="link">jake@turndowndsp.com</a></h2>
+        </div>
+      </div>
+    </div>
+  </section>
+
 </main>
 
-<script>
-(function () {
-  var stage = document.getElementById('stage');
-  var word = stage.querySelector('h1');
-  var letters = word.querySelectorAll('span');
+<footer class="foot-small">
+  <p class="small"><a class="link" href="mailto:jake@turndowndsp.com">jake@turndowndsp.com</a></p>
+  <p class="small">Turndown DSP · Jake Gillespie</p>
+</footer>
 
-  // Size the word to fill the width, but never taller than about half the screen.
-  function fit() {
-    word.style.fontSize = '100px';
-    var avail = stage.clientWidth - 2 * parseFloat(getComputedStyle(stage).paddingLeft);
-    // Sum the letters' own widths: scrollWidth would count the scattered
-    // letters' offsets and shrink the word.
-    var w = 0;
-    letters.forEach(function (l) { w += l.offsetWidth; });
-    var size = 100 * avail / w;
-    size = Math.min(size, window.innerHeight * 0.55);
-    word.style.fontSize = size + 'px';
-  }
+<div class="cursor" id="cursor" aria-hidden="true">
+  <div class="cursor-cross"><i class="h"></i><i class="v"></i></div>
+  <div class="cursor-brackets"><i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i></div>
+  <i class="cursor-dot"></i>
+  <div class="cursor-reading"><div class="readout-inline"><span class="fig"><span data-freq>1.00</span><span class="unit" data-freq-unit>kHz</span></span><span class="fig"><span data-gain>−3.0</span><span class="unit" data-gain-unit>dB</span></span></div></div>
+  <div class="cursor-open">open</div>
+</div>
 
-  // Centre the slash on the O itself: the middle of the letter's box is not
-  // the middle of the O, and the gap differs per font.
-  function centreSlash() {
-    var o = word.querySelector('.o');
-    var cs = getComputedStyle(word);
-    var ctx = document.createElement('canvas').getContext('2d');
-    ctx.font = cs.fontWeight + ' 1000px ' + cs.fontFamily;
-    var m = ctx.measureText('O');
-    if (!m.fontBoundingBoxAscent) return; // older browsers: keep the 50% fallback
-    var asc = m.fontBoundingBoxAscent / 1000, desc = m.fontBoundingBoxDescent / 1000;
-    var baseline = asc + (1 - asc - desc) / 2; // from the top of a line-height:1 box
-    var mid = baseline - (m.actualBoundingBoxAscent - m.actualBoundingBoxDescent) / 2000;
-    o.style.setProperty('--cy', mid.toFixed(4) + 'em');
-  }
-
-  // Letters alternate: first from above, next from below, and so on, each
-  // starting a beat after the one to its left.
-  function scatter() {
-    var d = window.innerHeight * 0.6;
-    letters.forEach(function (letter, i) {
-      letter.style.setProperty('--dy', (i % 2 ? d : -d).toFixed(1) + 'px');
-      letter.style.setProperty('--delay', (0.3 + i * 0.12).toFixed(2) + 's');
-    });
-  }
-
-  scatter();
-  stage.classList.add('armed');
-
-  var started = false;
-  function start() {
-    if (started) return;
-    started = true;
-    fit();
-    centreSlash();
-    void word.offsetWidth; // commit the scattered state before playing
-    stage.classList.add('play');
-  }
-
-  // Wait for the real font so the letters don't land in a fallback face,
-  // but never hold the page for more than a second and a half.
-  if (document.fonts && document.fonts.ready) {
-    document.fonts.ready.then(start);
-    setTimeout(start, 1500);
-  } else {
-    start();
-  }
-
-  window.addEventListener('resize', fit);
-})();
-</script>
+<script src="site.js" defer></script>
 </body>
 </html>
